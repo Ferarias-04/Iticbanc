@@ -20,7 +20,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        // ---------- 1. Carreguem les credencials del fitxer .properties ----------
+        //  1. Carreguem les credencials del fitxer .properties
         Properties prop = new Properties();
         try {
             prop.load(Files.newBufferedReader(Path.of("banc", "src", "main", "resources", "conn.properties")));
@@ -29,27 +29,27 @@ public class Main {
             return; // sense credencials no té sentit continuar
         }
 
-        // ---------- 2. Configurem el pool de connexions (HikariCP) ----------
+        // 2. Configurem el pool de connexions (HikariCP) 
         HikariConfig hkcfg = new HikariConfig();
         hkcfg.setJdbcUrl(prop.getProperty("DB_URL"));
         hkcfg.setUsername(prop.getProperty("DB_USER"));
         hkcfg.setPassword(prop.getProperty("DB_PASSWORD"));
         hkcfg.setMaximumPoolSize(Integer.parseInt(prop.getProperty("DB_MAX_POOL", "5")));
 
-        // ---------- 3. Obrim el datasource i una connexió ----------
+        // 3. Obrim el datasource i una connexió 
         try (HikariDataSource hkds = new HikariDataSource(hkcfg);
              Connection cnn = hkds.getConnection();
              Scanner sc = new Scanner(System.in)) {
 
             System.out.println("Connectat!");
 
-            // ---------- Punts 4 i 5: tots els moviments ----------
+            // Punts 4 i 5: tots els moviments
             System.out.println("\n=== Tots els moviments ===");
             for (String resultat : readAllStatements(cnn)) {
                 System.out.println("moviment amb id: " + resultat);
             }
 
-            // ---------- Exercici 1: moviments amb import >= quantitat ----------
+            //Exercici 1: moviments amb import >= quantitat 
             System.out.print("\nImport mínim (€): ");
             double quantitat = Double.parseDouble(sc.nextLine().trim());
             System.out.println("=== Moviments amb import >= " + quantitat + " ===");
@@ -57,7 +57,7 @@ public class Main {
                 System.out.println(linia);
             }
 
-            // ---------- Exercici 2: inserir un client nou ----------
+            // Exercici 2: inserir un client nou 
             System.out.println("\n=== Nou client ===");
             List<String> dadesClient = new ArrayList<>();
             System.out.print("Nom: ");
@@ -79,7 +79,7 @@ public class Main {
         }
     }
 
-    // ===================== PUNT 5 =====================
+    //  PUNT 5 
     public static List<String> readAllStatements(Connection conn) throws SQLException {
         List<String> resultatQuery = new ArrayList<>();
         String query = "SELECT * FROM statements";
@@ -98,7 +98,7 @@ public class Main {
         return resultatQuery;
     }
 
-    // ===================== EXERCICI 1 =====================
+    //  EXERCICI 1
     public static List<String> readStatementsByImport(Connection conn, double quantitat) throws SQLException {
         List<String> resultatQuery = new ArrayList<>();
         String query = "SELECT * FROM statements WHERE import >= ?";
@@ -129,7 +129,7 @@ public class Main {
         return resultatQuery;
     }
 
-    // ===================== EXERCICI 2 =====================
+    // EXERCICI 2 
 
     // Comprova si ja existeix un client amb aquest id_fiscal
     public static boolean existeixClient(Connection conn, String idFiscal) throws SQLException {
