@@ -1,0 +1,4 @@
+DB_URL=jdbc:postgresql://localhost:5432/Iticbanc
+DB_USER=usuari
+DB_PASSWORD=contrasenya
+DB_MAX_POOL=5
